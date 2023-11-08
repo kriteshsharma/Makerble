@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myapp-config
+data:
+  RAILS_ENV: production
+  POSTGRES_HOST: postgres-service  # Use the PostgreSQL service name
+  POSTGRES_DB: db_production
+  POSTGRES_USER: admin
+  POSTGRES_PASSWORD: admin
+  RAILS_MASTER_KEY: c0c83953f9beccf5c4489a4cdd7dc5ed

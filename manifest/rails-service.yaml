@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-web-service
+spec:
+  selector:
+    app: demo-web
+  ports:
+    - protocol: TCP
+      port: 3001
+      targetPort: 3001
+      nodePort: 30080  # If using NodePort type, specify the port here
+  type: LoadBalancer  # Or NodePort, depending on your Kubernetes setup
