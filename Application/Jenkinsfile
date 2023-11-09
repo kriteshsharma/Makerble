@@ -17,12 +17,15 @@ pipeline {
                     sh '''
                     echo 'Building docker image'
                     docker build -t krsharma/makerble:${BUILD_NUMBER} Application/.
+                    echo 'Image built successfully'
                     '''
             }
         }
         stage('login') {
             steps{
-                sh "docker login -u $DOCKERHUB_CREDENTIALS_USR --password $DOCKERHUB_CREDENTIALS_PSW -q"
+                echo 'Logging in to Docker Hub'
+                sh "docker login -u $DOCKERHUB_CREDENTIALS_USR --password $DOCKERHUB_CREDENTIALS_PSW"
+                echo 'Login successful'
             }
         }
         stage('Push Image '){
