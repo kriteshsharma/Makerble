@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: demo-web
-          image: krsharma/makerble:17
+          image: krsharma/makerble:1
           ports:
             - containerPort: 3001
           envFrom:
