@@ -25,10 +25,13 @@ pipeline {
             steps {
                 script {
                     echo 'Logging in to Docker Hub with access token'
-                    sh "docker login -u _json_key -p ${DOCKER_ACCESS_TOKEN} registry.hub.docker.com"
-                    echo 'Pushing docker image'
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-cred') {
-                        docker.image("krsharma/makerble:${BUILD_NUMBER}").push()
+            withCredentials([string(credentialsId: 'docker-pat', variable: 'DOCKER_ACCESS_TOKEN')]) {
+                sh "echo $DOCKER_ACCESS_TOKEN | docker login -u _json_key --password-stdin registry.hub.docker.com"
+                echo 'Pushing docker image'
+                docker.withRegistry('https://registry.hub.docker.com', 'docker-pat') {
+                    docker.image("krsharma/makerble:${BUILD_NUMBER}").push()
+                }
+                echo 'Image pushed successfully'
                     }
                 }
             }
