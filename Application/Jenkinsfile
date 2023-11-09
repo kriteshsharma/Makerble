@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment{
-        DOCKERHUB_CREDENTIALS = credentials('docker-cred')
+        DOCKER_ACCESS_TOKEN = credentials('docker-pat')
         IMAGE_TAG="${BUILD_NUMBER}"
     }
 
