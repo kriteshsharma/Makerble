@@ -21,19 +21,16 @@ pipeline {
                     '''
             }
         }
-        stage('login') {
-            steps{
-                echo 'Logging in to Docker Hub'
-                sh "docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password ${DOCKERHUB_CREDENTIALS_PSW}"
-                echo 'Login successful'
-            }
-        }
         stage('Push Image '){
-            steps{
-                sh '''
-                echo 'Pushing docker image'
-                docker push krsharma/makerble:${BUILD_NUMBER} 
-                '''
+            steps {
+                script {
+                    echo 'Logging in to Docker Hub with access token'
+                    sh "docker login -u _json_key -p ${DOCKERHUB_ACCESS_TOKEN} registry.hub.docker.com"
+                    echo 'Pushing docker image'
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-cred') {
+                        docker.image("krsharma/makerble:${BUILD_NUMBER}").push()
+                    }
+                }
             }
         }
         stage('Update manifest file'){
