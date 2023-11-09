@@ -25,7 +25,7 @@ pipeline {
             steps {
                 script {
                     echo 'Logging in to Docker Hub with access token'
-                    sh "docker login -u _json_key -p ${DOCKERHUB_ACCESS_TOKEN} registry.hub.docker.com"
+                    sh "docker login -u _json_key -p ${DOCKER_ACCESS_TOKEN} registry.hub.docker.com"
                     echo 'Pushing docker image'
                     docker.withRegistry('https://registry.hub.docker.com', 'docker-cred') {
                         docker.image("krsharma/makerble:${BUILD_NUMBER}").push()
