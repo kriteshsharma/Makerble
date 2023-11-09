@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment{
-        DOCKER_ACCESS_TOKEN = credentials('docker-pat')
+        DOCKERHUB_CREDENTIALS_PSW=credentials('docker-pass')
         IMAGE_TAG="${BUILD_NUMBER}"
     }
 
@@ -21,19 +21,17 @@ pipeline {
                     '''
             }
         }
+        stage('login') {
+            steps{
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u krsharma --password-stdin'
+            }
+        }
         stage('Push Image '){
-            steps {
-                script {
-                    echo 'Logging in to Docker Hub with access token'
-            withCredentials([string(credentialsId: 'docker-pat', variable: 'DOCKER_ACCESS_TOKEN')]) {
-                sh "echo $DOCKER_ACCESS_TOKEN | docker login -u _json_key --password-stdin registry.hub.docker.com"
+            steps{
+                sh '''
                 echo 'Pushing docker image'
-                docker.withRegistry('https://registry.hub.docker.com', 'docker-pat') {
-                    docker.image("krsharma/makerble:${BUILD_NUMBER}").push()
-                }
-                echo 'Image pushed successfully'
-                    }
-                }
+                docker push krsharma/python-ci-cd:${BUILD_NUMBER} 
+                '''
             }
         }
         stage('Update manifest file'){
